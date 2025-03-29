@@ -1,5 +1,7 @@
 # 3D modeling with build123d
 
+![city](images/city.jpg)
+
 ## Introduction
 
 This repository contains 2 exercises to showcase the build123d library for 3D modeling in Python. Originally, it was prepared for a Lightning Talk for PyGda, alongside this [presentation](https://slides.com/martasienkiewicz/deck-a7dc81/edit).
