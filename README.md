@@ -59,20 +59,13 @@ To get the building outlines we can use the open source geospacial dataset Open 
 
 OSM uses `labels` to organize the city data. I'm using the following ones:
 
+- building - to fetch all buildings in the area, including footprints
+- building:levels - to fetch number of floors of the building (more reliable than height of the building)
+
 ## Model representation
 
 Build123d uses BREP 3D model representation, which stands for 'boundary representation'. Offering precision, it is a commonly used technique in CAD (Computer-Aided Design).
 It is a representation of the 3D shape by bounding its volume with surfaces, curves, points etc. Moreover, it offers many transformation methods, such as boolean operations.
-
-To properly appreciate BREP let's consider another common 3D modelling representation method - mesh. In mesh, we represent a shape with edges and vertices.
-
-If we were to make a 3D model of a square object like this, it seems perfect. We represent vertices and edges, it's elegant, simple and precise.
-
-However, if we take a more complex shape, such as a curve things get more complicated. Remember, in mesh we have only straight edges and vertices. So we need to make this curve discrete, that is divide it into a finite number of elements.
-We can decide how many vertices we have. The more vertices, the more precise is this representation and the more complex the final model. Each vertex has a defined point in the 2D or 3D space. We might have 10 such points of one, very imprecise circle.
-
-On the other hand, using BREP we can represent this shape using a mathematical description. This way, we have a perfect circle - a bounding curve defined by its center and a diameter.
-Curves clearly show the weakness of mesh representation.
 
 ## Beauty of 3D modeling in Python
 
