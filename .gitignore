@@ -1,3 +1,6 @@
 .venv
 venv
 cache
+
+# 3D models
+*.stl

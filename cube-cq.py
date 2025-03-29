@@ -1,4 +1,4 @@
-from build123d import *
+from cadquery import *
 from ocp_vscode import show
 
 
@@ -10,11 +10,9 @@ def make_cube_hole(r: float, h: float, a: float):
     h (int): Height of the cube.
     a (int): Side of the cube.
     """
-    if r > a / 2:
+    if r > a:
         raise ValueError("Hole exceeds a size of the cube.")
-    cube = Box(a, a, h)
-    cylinder = Cylinder(r, h)
-    return cube - cylinder
+    return Workplane("XY").box(a, a, h).faces(">Z").hole(2*r)
 
 
 if __name__ == "__main__":
@@ -23,4 +21,3 @@ if __name__ == "__main__":
     a = 30
     cube = make_cube_hole(r, h, a)
     show(cube)
-    export_stl(cube, "cube.stl")
