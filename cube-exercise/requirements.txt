@@ -1,0 +1,2 @@
+build123d==0.8.0
+cadquery==2.5.2
