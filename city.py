@@ -22,6 +22,7 @@ locations = {  # (lat, lon)
     "garnizon": (54.354634, 18.651695),
 }
 
+
 def deg_to_rad(degrees: float) -> float:
     """
     Converts degrees to radians.
@@ -31,7 +32,8 @@ def deg_to_rad(degrees: float) -> float:
 
 def latlon_to_xy(center, p) -> tuple:
     """
-    Approximates XY coordinates from lon and lat in meters.
+    Approximates planar coordinates from geographic ones, in meters.
+    Uses equirectangular projection.
     """
     lat_delta = p[0] - center[0]
     lon_delta = p[1] - center[1]
@@ -42,6 +44,10 @@ def latlon_to_xy(center, p) -> tuple:
 
 
 def get_polygon_footprints(building_footprints: list) -> list:
+    """
+    Returns a list of building footprints.
+    Each building footprints consists of a list of points, that form a polyline.
+    """
     output_list = []
     for footprint in building_footprints:
         footprint_points = []
@@ -54,7 +60,7 @@ def get_polygon_footprints(building_footprints: list) -> list:
 
 def model_city(footprints, levels):
     """
-    Creates a 3D model of a city from building footprints.
+    Creates a 3D model of a city from building footprints and building levels.
     """
     footprints_with_levels = zip(footprints, levels)
     buildings_xy = []
@@ -71,6 +77,17 @@ def model_city(footprints, levels):
             buildings_xy.append(extr)
     return buildings_xy
 
+
+def map_to_html(target_location, footprint_list) -> None:
+    """
+    Use folium to draw building outlines on a map.
+    Save the map to html file.
+    """
+    m = folium.Map(location=target_location)
+    folium.PolyLine(footprint_list, tooltip="Building").add_to(m)
+    m.save("map.html")
+
+
 if __name__ == "__main__":
     target_location = locations["garnizon"]
     tags = {"building": True, "building:levels": True}
@@ -80,12 +97,10 @@ if __name__ == "__main__":
     building_footprints = buildings.geometry
     footprint_list = get_polygon_footprints(building_footprints)
 
-    m = folium.Map(location=target_location)
-    folium.PolyLine(footprint_list, tooltip="Building").add_to(m)
-    m.save("index.html")
+    map_to_html(target_location, footprint_list)
 
     city = model_city(footprint_list, building_heights.values)
-    show(city, timeit=True)
-    
+    show(city)
+
     city_compound = Compound(label="city", children=city)
     export_stl(city_compound, "city.stl")
