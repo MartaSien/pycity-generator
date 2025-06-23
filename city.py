@@ -8,6 +8,7 @@ import folium
 MERIDIAN = 40008000  # Length of the meridian in meters
 EQUATOR = 40075160  # Length of the equator in meters
 LEVEL_HEIGHT = 3.2  # Approximate height of one level in meters
+AREA_RADIUS = 1000  # Radius of the area of the city model in meters
 
 locations = {  # (lat, lon)
     "przymorze": (
@@ -20,6 +21,7 @@ locations = {  # (lat, lon)
     ),  # https://obliview.brg.gda.pl/?d=0&l=-1&r=11&z=17&x=2071924.1871135524&y=7245145.238027415&poz=3527504.56,1187987.19,5163153.89,-0.5518,-0.1858,-0.8130,-0.7705,-0.2595,0.5822,-0.3192,0.9477,-0.0000&k=N&akLay=empty&sv=false&panoId=undefined
     "lawendowa": (54.352788, 18.652757),
     "garnizon": (54.354634, 18.651695),
+    "alchemia": (54.398232, 18.577054),
 }
 
 
@@ -51,6 +53,9 @@ def get_polygon_footprints(building_footprints: list) -> list:
     output_list = []
     for footprint in building_footprints:
         footprint_points = []
+        if footprint.area == 0:
+            print("Empty footprint found, skipping...")
+            continue
         lon, lat = footprint.exterior.coords.xy
         for i in range(len(lon)):
             footprint_points.append((lat[i], lon[i]))
@@ -89,9 +94,9 @@ def map_to_html(target_location, footprint_list) -> None:
 
 
 if __name__ == "__main__":
-    target_location = locations["garnizon"]
+    target_location = locations["alchemia"]
     tags = {"building": True, "building:levels": True}
-    buildings = ox.features.features_from_point(target_location, tags, 300)
+    buildings = ox.features.features_from_point(target_location, tags, AREA_RADIUS)
     building_heights = buildings[["building:levels"]].fillna(3)
 
     building_footprints = buildings.geometry
