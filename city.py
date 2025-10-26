@@ -22,6 +22,7 @@ locations = {  # (lat, lon)
     "lawendowa": (54.352788, 18.652757),
     "garnizon": (54.354634, 18.651695),
     "alchemia": (54.398232, 18.577054),
+    "tensor": (54.49287695, 18.534186)
 }
 
 
@@ -94,7 +95,7 @@ def map_to_html(target_location, footprint_list) -> None:
 
 
 if __name__ == "__main__":
-    target_location = locations["alchemia"]
+    target_location = locations["tensor"]
     tags = {"building": True, "building:levels": True}
     buildings = ox.features.features_from_point(target_location, tags, AREA_RADIUS)
     building_heights = buildings[["building:levels"]].fillna(3)
